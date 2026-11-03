@@ -1,0 +1,86 @@
+{
+  "teacher": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/t1_balance_v2/booster_gym_reference/deploy/models/T1.pt",
+  "student_before_dagger": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/t1_balance_v2/walk_runs/student_bc_corrected_20261029_001135/student_actor.pt",
+  "samples": 6000,
+  "episodes": [
+    {
+      "episode": 0,
+      "command": {
+        "vx": 0.08,
+        "vy": 0.0,
+        "yaw_rate": 0.015
+      },
+      "duration_s": 20.0,
+      "fell": false,
+      "max_tilt_deg": 10.987,
+      "student_steps": 86,
+      "teacher_intervention_steps": 914
+    },
+    {
+      "episode": 1,
+      "command": {
+        "vx": 0.08,
+        "vy": 0.0,
+        "yaw_rate": 0.015
+      },
+      "duration_s": 20.0,
+      "fell": false,
+      "max_tilt_deg": 10.987,
+      "student_steps": 86,
+      "teacher_intervention_steps": 914
+    },
+    {
+      "episode": 2,
+      "command": {
+        "vx": 0.1,
+        "vy": 0.0,
+        "yaw_rate": 0.015
+      },
+      "duration_s": 20.0,
+      "fell": false,
+      "max_tilt_deg": 11.604,
+      "student_steps": 59,
+      "teacher_intervention_steps": 941
+    },
+    {
+      "episode": 3,
+      "command": {
+        "vx": 0.1,
+        "vy": 0.0,
+        "yaw_rate": 0.015
+      },
+      "duration_s": 20.0,
+      "fell": false,
+      "max_tilt_deg": 11.604,
+      "student_steps": 59,
+      "teacher_intervention_steps": 941
+    },
+    {
+      "episode": 4,
+      "command": {
+        "vx": 0.12,
+        "vy": 0.0,
+        "yaw_rate": 0.015
+      },
+      "duration_s": 20.0,
+      "fell": false,
+      "max_tilt_deg": 6.592,
+      "student_steps": 19,
+      "teacher_intervention_steps": 981
+    },
+    {
+      "episode": 5,
+      "command": {
+        "vx": 0.12,
+        "vy": 0.0,
+        "yaw_rate": 0.015
+      },
+      "duration_s": 20.0,
+      "fell": false,
+      "max_tilt_deg": 6.592,
+      "student_steps": 19,
+      "teacher_intervention_steps": 981
+    }
+  ],
+  "purpose": "student-state aggregation with teacher action labels"
+}

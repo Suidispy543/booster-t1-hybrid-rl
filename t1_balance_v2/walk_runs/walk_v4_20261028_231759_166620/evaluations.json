@@ -1,0 +1,62 @@
+[
+  {
+    "training_steps_added": 5120,
+    "checkpoint": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/t1_balance_v2/walk_runs/walk_v4_20261028_231759_166620/checkpoint_after_005120.zip",
+    "evaluation": {
+      "duration_s": 20.0,
+      "fell": false,
+      "forward_displacement_m": -0.025,
+      "lateral_displacement_m": 0.0089,
+      "mean_forward_speed_m_s": -0.0007,
+      "mean_lateral_speed_m_s": 0.0001,
+      "mean_tilt_deg": 2.019,
+      "max_tilt_deg": 3.741,
+      "target_speed_m_s": 0.1
+    }
+  },
+  {
+    "training_steps_added": 10240,
+    "checkpoint": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/t1_balance_v2/walk_runs/walk_v4_20261028_231759_166620/checkpoint_after_010240.zip",
+    "evaluation": {
+      "duration_s": 20.0,
+      "fell": false,
+      "forward_displacement_m": -0.0193,
+      "lateral_displacement_m": 0.017,
+      "mean_forward_speed_m_s": -0.0005,
+      "mean_lateral_speed_m_s": 0.0005,
+      "mean_tilt_deg": 2.115,
+      "max_tilt_deg": 3.459,
+      "target_speed_m_s": 0.1
+    }
+  },
+  {
+    "training_steps_added": 15360,
+    "checkpoint": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/t1_balance_v2/walk_runs/walk_v4_20261028_231759_166620/checkpoint_after_015360.zip",
+    "evaluation": {
+      "duration_s": 20.0,
+      "fell": false,
+      "forward_displacement_m": -0.0197,
+      "lateral_displacement_m": 0.0156,
+      "mean_forward_speed_m_s": -0.0005,
+      "mean_lateral_speed_m_s": 0.0004,
+      "mean_tilt_deg": 2.045,
+      "max_tilt_deg": 4.036,
+      "target_speed_m_s": 0.1
+    }
+  },
+  {
+    "training_steps_added": 20480,
+    "checkpoint": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/t1_balance_v2/walk_runs/walk_v4_20261028_231759_166620/checkpoint_after_020480.zip",
+    "evaluation": {
+      "duration_s": 20.0,
+      "fell": false,
+      "forward_displacement_m": -0.0156,
+      "lateral_displacement_m": 0.021,
+      "mean_forward_speed_m_s": -0.0004,
+      "mean_lateral_speed_m_s": 0.0006,
+      "mean_tilt_deg": 2.034,
+      "max_tilt_deg": 3.388,
+      "target_speed_m_s": 0.1
+    }
+  }
+]

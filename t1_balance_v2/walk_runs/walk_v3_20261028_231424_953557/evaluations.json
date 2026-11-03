@@ -1,0 +1,92 @@
+[
+  {
+    "training_steps_added": 5120,
+    "checkpoint": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/t1_balance_v2/walk_runs/walk_v3_20261028_231424_953557/checkpoint_after_005120.zip",
+    "evaluation": {
+      "duration_s": 20.0,
+      "fell": false,
+      "forward_displacement_m": -0.0244,
+      "lateral_displacement_m": 0.0138,
+      "mean_forward_speed_m_s": -0.0004,
+      "mean_lateral_speed_m_s": 0.0004,
+      "mean_tilt_deg": 4.314,
+      "max_tilt_deg": 4.436,
+      "target_speed_m_s": 0.1
+    }
+  },
+  {
+    "training_steps_added": 10240,
+    "checkpoint": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/t1_balance_v2/walk_runs/walk_v3_20261028_231424_953557/checkpoint_after_010240.zip",
+    "evaluation": {
+      "duration_s": 20.0,
+      "fell": false,
+      "forward_displacement_m": -0.0209,
+      "lateral_displacement_m": 0.0138,
+      "mean_forward_speed_m_s": -0.0003,
+      "mean_lateral_speed_m_s": 0.0004,
+      "mean_tilt_deg": 4.293,
+      "max_tilt_deg": 4.463,
+      "target_speed_m_s": 0.1
+    }
+  },
+  {
+    "training_steps_added": 15360,
+    "checkpoint": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/t1_balance_v2/walk_runs/walk_v3_20261028_231424_953557/checkpoint_after_015360.zip",
+    "evaluation": {
+      "duration_s": 20.0,
+      "fell": false,
+      "forward_displacement_m": -0.0201,
+      "lateral_displacement_m": 0.0176,
+      "mean_forward_speed_m_s": -0.0004,
+      "mean_lateral_speed_m_s": 0.0002,
+      "mean_tilt_deg": 4.121,
+      "max_tilt_deg": 4.373,
+      "target_speed_m_s": 0.1
+    }
+  },
+  {
+    "training_steps_added": 20480,
+    "checkpoint": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/t1_balance_v2/walk_runs/walk_v3_20261028_231424_953557/checkpoint_after_020480.zip",
+    "evaluation": {
+      "duration_s": 20.0,
+      "fell": false,
+      "forward_displacement_m": -0.0181,
+      "lateral_displacement_m": 0.0171,
+      "mean_forward_speed_m_s": -0.0004,
+      "mean_lateral_speed_m_s": 0.0002,
+      "mean_tilt_deg": 4.039,
+      "max_tilt_deg": 4.257,
+      "target_speed_m_s": 0.1
+    }
+  },
+  {
+    "training_steps_added": 25600,
+    "checkpoint": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/t1_balance_v2/walk_runs/walk_v3_20261028_231424_953557/checkpoint_after_025600.zip",
+    "evaluation": {
+      "duration_s": 20.0,
+      "fell": false,
+      "forward_displacement_m": -0.0165,
+      "lateral_displacement_m": 0.0157,
+      "mean_forward_speed_m_s": -0.0004,
+      "mean_lateral_speed_m_s": 0.0002,
+      "mean_tilt_deg": 4.053,
+      "max_tilt_deg": 4.225,
+      "target_speed_m_s": 0.1
+    }
+  },
+  {
+    "training_steps_added": 30720,
+    "checkpoint": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/t1_balance_v2/walk_runs/walk_v3_20261028_231424_953557/checkpoint_after_030720.zip",
+    "evaluation": {
+      "duration_s": 20.0,
+      "fell": false,
+      "forward_displacement_m": -0.0148,
+      "lateral_displacement_m": 0.0162,
+      "mean_forward_speed_m_s": -0.0004,
+      "mean_lateral_speed_m_s": 0.0004,
+      "mean_tilt_deg": 3.961,
+      "max_tilt_deg": 4.136,
+      "target_speed_m_s": 0.1
+    }
+  }
+]

@@ -1,0 +1,12 @@
+{
+  "sample_rate_hz": 500,
+  "duration_s": 10,
+  "samples": 5000,
+  "after5_leg_velocity_rms_rad_s": 0.00226701019961412,
+  "after5_root_angular_speed_rms_rad_s": 0.0061777447120552244,
+  "after5_max_instantaneous_leg_rms_rad_s": 0.0029937179355821156,
+  "notes": [
+    "Physics-step sampling, unchanged MuJoCo integration.",
+    "Only a 10-second diagnostic; 180-second and perturbation results are measured separately."
+  ]
+}

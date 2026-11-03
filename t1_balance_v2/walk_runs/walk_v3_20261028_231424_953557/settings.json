@@ -1,0 +1,12 @@
+{
+  "starting_checkpoint": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/t1_balance_v2/runs/stance_alpha0.5_20261028_215029_608658/checkpoint_000025600.zip",
+  "steps_requested": 30000,
+  "eval_every": 5000,
+  "target_speed_m_s": 0.1,
+  "gait_frequency_hz": 0.8,
+  "learning_rate": 3e-05,
+  "exploration_std": 0.25,
+  "observation_size": 74,
+  "action_size": 12,
+  "approach": "PPO fine-tuning with explicit gait-phase observations"
+}

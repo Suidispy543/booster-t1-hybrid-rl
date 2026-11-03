@@ -1,0 +1,13 @@
+{
+  "starting_checkpoint": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/t1_balance_v2/runs/stance_alpha0.5_20261028_215029_608658/checkpoint_000025600.zip",
+  "steps_requested": 40000,
+  "evaluation_interval": 10000,
+  "target_speed_m_s": 0.2,
+  "learning_rate": 2e-05,
+  "exploration_std": 0.18,
+  "tilt_weight": 50.0,
+  "tilt_linear_weight": 6.0,
+  "forward_axis": "+X",
+  "observation_size": 72,
+  "action_size": 12
+}

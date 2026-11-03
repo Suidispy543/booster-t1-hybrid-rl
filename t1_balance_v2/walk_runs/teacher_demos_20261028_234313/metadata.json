@@ -1,0 +1,48 @@
+{
+  "teacher_policy": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/t1_balance_v2/booster_gym_reference/deploy/models/T1.pt",
+  "robot_model": "Google DeepMind MuJoCo Menagerie Booster T1 scene.xml",
+  "observation_size": 47,
+  "action_size": 12,
+  "dt": 0.002,
+  "decimation": 10,
+  "action_scale": 1.0,
+  "episodes": [
+    {
+      "episode": 0,
+      "command": {
+        "vx": 0.08,
+        "vy": 0.0,
+        "yaw_rate": 0.015
+      },
+      "samples": 1500,
+      "duration_s": 30.0,
+      "fell": false,
+      "max_tilt_deg": 3.482
+    },
+    {
+      "episode": 1,
+      "command": {
+        "vx": 0.1,
+        "vy": 0.0,
+        "yaw_rate": 0.015
+      },
+      "samples": 1500,
+      "duration_s": 30.0,
+      "fell": false,
+      "max_tilt_deg": 3.454
+    },
+    {
+      "episode": 2,
+      "command": {
+        "vx": 0.12,
+        "vy": 0.0,
+        "yaw_rate": 0.015
+      },
+      "samples": 1500,
+      "duration_s": 30.0,
+      "fell": false,
+      "max_tilt_deg": 3.48
+    }
+  ],
+  "samples_collected": 4500
+}

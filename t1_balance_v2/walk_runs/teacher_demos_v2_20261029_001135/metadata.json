@@ -1,0 +1,43 @@
+{
+  "teacher": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/t1_balance_v2/booster_gym_reference/deploy/models/T1.pt",
+  "robot_model": "original Google DeepMind T1 scene.xml",
+  "actuator_gains": "matched to working teacher playback",
+  "observation_size": 47,
+  "action_size": 12,
+  "dt": 0.002,
+  "decimation": 10,
+  "action_scale": 1.0,
+  "samples": 4500,
+  "episodes": [
+    {
+      "episode": 0,
+      "command_vx": 0.08,
+      "duration_s": 30.0,
+      "samples": 1500,
+      "fell": false,
+      "max_tilt_deg": 3.482,
+      "forward_displacement_m": 2.0147,
+      "lateral_displacement_m": -0.6537
+    },
+    {
+      "episode": 1,
+      "command_vx": 0.1,
+      "duration_s": 30.0,
+      "samples": 1500,
+      "fell": false,
+      "max_tilt_deg": 3.454,
+      "forward_displacement_m": 2.5129,
+      "lateral_displacement_m": -0.657
+    },
+    {
+      "episode": 2,
+      "command_vx": 0.12,
+      "duration_s": 30.0,
+      "samples": 1500,
+      "fell": false,
+      "max_tilt_deg": 3.48,
+      "forward_displacement_m": 3.0349,
+      "lateral_displacement_m": -0.6464
+    }
+  ]
+}

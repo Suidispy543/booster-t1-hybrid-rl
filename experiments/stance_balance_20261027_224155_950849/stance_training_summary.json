@@ -1,0 +1,1188 @@
+{
+  "settings": {
+    "model": "experiments/smooth_balance_20261027_221853_406565/control/checkpoint_000050176.zip",
+    "additional_steps": 100000,
+    "eval_every": 25000,
+    "eval_seconds": 60.0,
+    "stance_weight": 0.25,
+    "seed": 42,
+    "check_only": false
+  },
+  "input_sha256": {
+    "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/experiments/smooth_balance_20261027_221853_406565/control/checkpoint_000050176.zip": "d1bd0d4ac71394dd4ca66d33eb9d3e5f5a9ae60ae8247235a7275cd7cb95680a",
+    "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/scripts/t1_balance_env.py": "5beb40a857b9416893419f8b8d157a711cf775186a2dec5e7f0b6e646e4232cc"
+  },
+  "training_horizon_s": 4.0,
+  "versions": {
+    "mujoco": "3.17.0",
+    "stable-baselines3": "2.9.2",
+    "gymnasium": "1.4.0",
+    "numpy": "2.5.4",
+    "torch": "2.14.1"
+  },
+  "reward_formula": "original_reward - weight * min(((foot_separation-home_separation)/0.10)^2, 4)",
+  "notes": [
+    "Control weight=0, stance weight as specified. Both resume identical saved weights/optimizer and seed.",
+    "Home separation is measured after reset, from the two foot-body origins.",
+    "Only reward differs; original observations, action scale, 4 s training horizon and all physics parameters are retained.",
+    "Evaluations use the original reward, no action filter, same home state, and preserve training RNG/mode.",
+    "Force readings are from the last physics substep. Near-limit uses a margin of 1% of actuator force-range width.",
+    "Joint-level force clamps are reported separately; actuator-force saturation alone does not cover them.",
+    "One-seed nominal-start screening only. Failed short runs may show deceptively small width errors.",
+    "No candidate is automatically installed. Additional steps may round up to complete rollouts."
+  ],
+  "evaluations": [
+    {
+      "duration_s": 60.0,
+      "steps": 3000,
+      "outcome": "time limit reached",
+      "original_reward_return": 13225.368323940245,
+      "initial_foot_separation_m": 0.2125,
+      "final_foot_separation_m": 0.6685917828706937,
+      "maximum_foot_separation_m": 0.6685917828706937,
+      "max_absolute_width_error_m": 0.45609178287069363,
+      "final_width_growth_m": 0.45609178287069363,
+      "last_window_duration_s": 10.0,
+      "last_window_width_slope_m_s": 0.00557382680663923,
+      "max_root_displacement_m": 0.07237954790563139,
+      "minimum_root_height_m": 0.6336680109277306,
+      "minimum_upright": 0.992540545401004,
+      "target_delta_rms_rad": 0.018888181840841945,
+      "hip_model_settings": {
+        "left": {
+          "actuator_gainprm": [
+            75.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_biasprm": [
+            0.0,
+            -75.0,
+            -5.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_forcelimited": false,
+          "actuator_forcerange": [
+            0.0,
+            0.0
+          ],
+          "joint_range_rad": [
+            -0.2,
+            1.57
+          ],
+          "control_range_rad": [
+            -0.19999999999999996,
+            1.57
+          ],
+          "joint_actuator_force_limited": true,
+          "joint_actuator_force_range_Nm": [
+            -30.0,
+            30.0
+          ]
+        },
+        "right": {
+          "actuator_gainprm": [
+            75.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_biasprm": [
+            0.0,
+            -75.0,
+            -5.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_forcelimited": false,
+          "actuator_forcerange": [
+            0.0,
+            0.0
+          ],
+          "joint_range_rad": [
+            -1.57,
+            0.2
+          ],
+          "control_range_rad": [
+            -1.57,
+            0.19999999999999996
+          ],
+          "joint_actuator_force_limited": true,
+          "joint_actuator_force_range_Nm": [
+            -30.0,
+            30.0
+          ]
+        }
+      },
+      "trajectory_csv": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/experiments/stance_balance_20261027_224155_950849/reference.csv",
+      "left_hip": {
+        "final_actual_rad": 0.42143333569299357,
+        "final_target_rad": 0.19773800671100616,
+        "minimum_actuator_force": -17.1402154082379,
+        "maximum_actuator_force": 17.164437241699996,
+        "max_abs_joint_actuator_torque_Nm": 17.164437241699996,
+        "fraction_near_actuator_force_limit": null
+      },
+      "right_hip": {
+        "final_actual_rad": -0.42804456845583444,
+        "final_target_rad": -0.20000000298023224,
+        "minimum_actuator_force": -15.54257274056335,
+        "maximum_actuator_force": 17.141887174928335,
+        "max_abs_joint_actuator_torque_Nm": 17.141887174928335,
+        "fraction_near_actuator_force_limit": null
+      },
+      "branch": "reference",
+      "additional_steps": 0,
+      "model_path": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/experiments/stance_balance_20261027_224155_950849/starting_policy.zip"
+    },
+    {
+      "duration_s": 60.0,
+      "steps": 3000,
+      "outcome": "time limit reached",
+      "original_reward_return": 13353.013036899025,
+      "initial_foot_separation_m": 0.2125,
+      "final_foot_separation_m": 0.37501890197516924,
+      "maximum_foot_separation_m": 0.4053467773397695,
+      "max_absolute_width_error_m": 0.1928467773397695,
+      "final_width_growth_m": 0.16251890197516924,
+      "last_window_duration_s": 10.0,
+      "last_window_width_slope_m_s": 0.0021468604778922774,
+      "max_root_displacement_m": 0.4153185250271345,
+      "minimum_root_height_m": 0.6611513803356011,
+      "minimum_upright": 0.9923036047165471,
+      "target_delta_rms_rad": 0.16875000935198362,
+      "hip_model_settings": {
+        "left": {
+          "actuator_gainprm": [
+            75.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_biasprm": [
+            0.0,
+            -75.0,
+            -5.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_forcelimited": false,
+          "actuator_forcerange": [
+            0.0,
+            0.0
+          ],
+          "joint_range_rad": [
+            -0.2,
+            1.57
+          ],
+          "control_range_rad": [
+            -0.19999999999999996,
+            1.57
+          ],
+          "joint_actuator_force_limited": true,
+          "joint_actuator_force_range_Nm": [
+            -30.0,
+            30.0
+          ]
+        },
+        "right": {
+          "actuator_gainprm": [
+            75.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_biasprm": [
+            0.0,
+            -75.0,
+            -5.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_forcelimited": false,
+          "actuator_forcerange": [
+            0.0,
+            0.0
+          ],
+          "joint_range_rad": [
+            -1.57,
+            0.2
+          ],
+          "control_range_rad": [
+            -1.57,
+            0.19999999999999996
+          ],
+          "joint_actuator_force_limited": true,
+          "joint_actuator_force_range_Nm": [
+            -30.0,
+            30.0
+          ]
+        }
+      },
+      "trajectory_csv": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/experiments/stance_balance_20261027_224155_950849/control/evaluation_000025088.csv",
+      "left_hip": {
+        "final_actual_rad": 0.10132389962475641,
+        "final_target_rad": 0.20000000298023224,
+        "minimum_actuator_force": -24.742055513562402,
+        "maximum_actuator_force": 16.760098314336425,
+        "max_abs_joint_actuator_torque_Nm": 24.742055513562402,
+        "fraction_near_actuator_force_limit": null
+      },
+      "right_hip": {
+        "final_actual_rad": -0.15505366272522836,
+        "final_target_rad": -0.20000000298023224,
+        "minimum_actuator_force": -18.728915519980724,
+        "maximum_actuator_force": 27.71976315066012,
+        "max_abs_joint_actuator_torque_Nm": 27.71976315066012,
+        "fraction_near_actuator_force_limit": null
+      },
+      "branch": "control",
+      "additional_steps": 25088,
+      "total_model_steps": 275456,
+      "model_path": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/experiments/stance_balance_20261027_224155_950849/control/checkpoint_000025088.zip"
+    },
+    {
+      "duration_s": 60.0,
+      "steps": 3000,
+      "outcome": "time limit reached",
+      "original_reward_return": 13353.777964098861,
+      "initial_foot_separation_m": 0.2125,
+      "final_foot_separation_m": 0.38758008776082037,
+      "maximum_foot_separation_m": 0.43753939804856046,
+      "max_absolute_width_error_m": 0.22503939804856046,
+      "final_width_growth_m": 0.17508008776082037,
+      "last_window_duration_s": 10.0,
+      "last_window_width_slope_m_s": -0.0007970518830955344,
+      "max_root_displacement_m": 0.1796815244041277,
+      "minimum_root_height_m": 0.6604600850717205,
+      "minimum_upright": 0.9908272822839764,
+      "target_delta_rms_rad": 0.13090114921779297,
+      "hip_model_settings": {
+        "left": {
+          "actuator_gainprm": [
+            75.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_biasprm": [
+            0.0,
+            -75.0,
+            -5.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_forcelimited": false,
+          "actuator_forcerange": [
+            0.0,
+            0.0
+          ],
+          "joint_range_rad": [
+            -0.2,
+            1.57
+          ],
+          "control_range_rad": [
+            -0.19999999999999996,
+            1.57
+          ],
+          "joint_actuator_force_limited": true,
+          "joint_actuator_force_range_Nm": [
+            -30.0,
+            30.0
+          ]
+        },
+        "right": {
+          "actuator_gainprm": [
+            75.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_biasprm": [
+            0.0,
+            -75.0,
+            -5.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_forcelimited": false,
+          "actuator_forcerange": [
+            0.0,
+            0.0
+          ],
+          "joint_range_rad": [
+            -1.57,
+            0.2
+          ],
+          "control_range_rad": [
+            -1.57,
+            0.19999999999999996
+          ],
+          "joint_actuator_force_limited": true,
+          "joint_actuator_force_range_Nm": [
+            -30.0,
+            30.0
+          ]
+        }
+      },
+      "trajectory_csv": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/experiments/stance_balance_20261027_224155_950849/control/evaluation_000050176.csv",
+      "left_hip": {
+        "final_actual_rad": 0.12950119036886512,
+        "final_target_rad": 0.20000000298023224,
+        "minimum_actuator_force": -28.24925769756466,
+        "maximum_actuator_force": 16.322097424867284,
+        "max_abs_joint_actuator_torque_Nm": 28.24925769756466,
+        "fraction_near_actuator_force_limit": null
+      },
+      "right_hip": {
+        "final_actual_rad": -0.13542695628794124,
+        "final_target_rad": -0.20000000298023224,
+        "minimum_actuator_force": -19.189888965109652,
+        "maximum_actuator_force": 29.750559293004972,
+        "max_abs_joint_actuator_torque_Nm": 29.750559293004972,
+        "fraction_near_actuator_force_limit": null
+      },
+      "branch": "control",
+      "additional_steps": 50176,
+      "total_model_steps": 300544,
+      "model_path": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/experiments/stance_balance_20261027_224155_950849/control/checkpoint_000050176.zip"
+    },
+    {
+      "duration_s": 60.0,
+      "steps": 3000,
+      "outcome": "time limit reached",
+      "original_reward_return": 13014.105139211613,
+      "initial_foot_separation_m": 0.2125,
+      "final_foot_separation_m": 0.69931184026413,
+      "maximum_foot_separation_m": 0.69931184026413,
+      "max_absolute_width_error_m": 0.48681184026412994,
+      "final_width_growth_m": 0.48681184026412994,
+      "last_window_duration_s": 10.0,
+      "last_window_width_slope_m_s": 0.003541898922054302,
+      "max_root_displacement_m": 0.06417477346451471,
+      "minimum_root_height_m": 0.6285011810791091,
+      "minimum_upright": 0.9770431379627006,
+      "target_delta_rms_rad": 0.09528904927075044,
+      "hip_model_settings": {
+        "left": {
+          "actuator_gainprm": [
+            75.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_biasprm": [
+            0.0,
+            -75.0,
+            -5.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_forcelimited": false,
+          "actuator_forcerange": [
+            0.0,
+            0.0
+          ],
+          "joint_range_rad": [
+            -0.2,
+            1.57
+          ],
+          "control_range_rad": [
+            -0.19999999999999996,
+            1.57
+          ],
+          "joint_actuator_force_limited": true,
+          "joint_actuator_force_range_Nm": [
+            -30.0,
+            30.0
+          ]
+        },
+        "right": {
+          "actuator_gainprm": [
+            75.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_biasprm": [
+            0.0,
+            -75.0,
+            -5.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_forcelimited": false,
+          "actuator_forcerange": [
+            0.0,
+            0.0
+          ],
+          "joint_range_rad": [
+            -1.57,
+            0.2
+          ],
+          "control_range_rad": [
+            -1.57,
+            0.19999999999999996
+          ],
+          "joint_actuator_force_limited": true,
+          "joint_actuator_force_range_Nm": [
+            -30.0,
+            30.0
+          ]
+        }
+      },
+      "trajectory_csv": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/experiments/stance_balance_20261027_224155_950849/control/evaluation_000075264.csv",
+      "left_hip": {
+        "final_actual_rad": 0.4717961885656516,
+        "final_target_rad": 0.20000000298023224,
+        "minimum_actuator_force": -26.311291852677275,
+        "maximum_actuator_force": 16.13495178960803,
+        "max_abs_joint_actuator_torque_Nm": 26.311291852677275,
+        "fraction_near_actuator_force_limit": null
+      },
+      "right_hip": {
+        "final_actual_rad": -0.46691366960382624,
+        "final_target_rad": -0.20000000298023224,
+        "minimum_actuator_force": -17.527103854818698,
+        "maximum_actuator_force": 34.25670010176728,
+        "max_abs_joint_actuator_torque_Nm": 30.0,
+        "fraction_near_actuator_force_limit": null
+      },
+      "branch": "control",
+      "additional_steps": 75264,
+      "total_model_steps": 325632,
+      "model_path": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/experiments/stance_balance_20261027_224155_950849/control/checkpoint_000075264.zip"
+    },
+    {
+      "duration_s": 60.0,
+      "steps": 3000,
+      "outcome": "time limit reached",
+      "original_reward_return": 12989.590176295867,
+      "initial_foot_separation_m": 0.2125,
+      "final_foot_separation_m": 0.7249661979302884,
+      "maximum_foot_separation_m": 0.7251061210147701,
+      "max_absolute_width_error_m": 0.5126061210147701,
+      "final_width_growth_m": 0.5124661979302884,
+      "last_window_duration_s": 10.0,
+      "last_window_width_slope_m_s": 0.004525365490997663,
+      "max_root_displacement_m": 0.052203716132768786,
+      "minimum_root_height_m": 0.6211666246465463,
+      "minimum_upright": 0.9795487469377746,
+      "target_delta_rms_rad": 0.11386307974088174,
+      "hip_model_settings": {
+        "left": {
+          "actuator_gainprm": [
+            75.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_biasprm": [
+            0.0,
+            -75.0,
+            -5.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_forcelimited": false,
+          "actuator_forcerange": [
+            0.0,
+            0.0
+          ],
+          "joint_range_rad": [
+            -0.2,
+            1.57
+          ],
+          "control_range_rad": [
+            -0.19999999999999996,
+            1.57
+          ],
+          "joint_actuator_force_limited": true,
+          "joint_actuator_force_range_Nm": [
+            -30.0,
+            30.0
+          ]
+        },
+        "right": {
+          "actuator_gainprm": [
+            75.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_biasprm": [
+            0.0,
+            -75.0,
+            -5.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_forcelimited": false,
+          "actuator_forcerange": [
+            0.0,
+            0.0
+          ],
+          "joint_range_rad": [
+            -1.57,
+            0.2
+          ],
+          "control_range_rad": [
+            -1.57,
+            0.19999999999999996
+          ],
+          "joint_actuator_force_limited": true,
+          "joint_actuator_force_range_Nm": [
+            -30.0,
+            30.0
+          ]
+        }
+      },
+      "trajectory_csv": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/experiments/stance_balance_20261027_224155_950849/control/evaluation_000100352.csv",
+      "left_hip": {
+        "final_actual_rad": 0.49500782777552366,
+        "final_target_rad": 0.20000000298023224,
+        "minimum_actuator_force": -25.567124545336732,
+        "maximum_actuator_force": 17.455399928767203,
+        "max_abs_joint_actuator_torque_Nm": 25.567124545336732,
+        "fraction_near_actuator_force_limit": null
+      },
+      "right_hip": {
+        "final_actual_rad": -0.5012709659538637,
+        "final_target_rad": -0.20000000298023224,
+        "minimum_actuator_force": -17.213440353768767,
+        "maximum_actuator_force": 23.45416237748796,
+        "max_abs_joint_actuator_torque_Nm": 23.45416237748796,
+        "fraction_near_actuator_force_limit": null
+      },
+      "branch": "control",
+      "additional_steps": 100352,
+      "total_model_steps": 350720,
+      "model_path": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/experiments/stance_balance_20261027_224155_950849/control/checkpoint_000100352.zip"
+    },
+    {
+      "duration_s": 18.48,
+      "steps": 924,
+      "outcome": "fall threshold reached",
+      "original_reward_return": 4037.0272598521724,
+      "initial_foot_separation_m": 0.2125,
+      "final_foot_separation_m": 0.20418270982955483,
+      "maximum_foot_separation_m": 0.3235820502665479,
+      "max_absolute_width_error_m": 0.11108205026654791,
+      "final_width_growth_m": -0.008317290170445163,
+      "last_window_duration_s": 10.0,
+      "last_window_width_slope_m_s": -0.008958723804252729,
+      "max_root_displacement_m": 0.622454742536687,
+      "minimum_root_height_m": 0.3515958067801437,
+      "minimum_upright": 0.4961126126454676,
+      "target_delta_rms_rad": 0.21509649006812823,
+      "hip_model_settings": {
+        "left": {
+          "actuator_gainprm": [
+            75.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_biasprm": [
+            0.0,
+            -75.0,
+            -5.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_forcelimited": false,
+          "actuator_forcerange": [
+            0.0,
+            0.0
+          ],
+          "joint_range_rad": [
+            -0.2,
+            1.57
+          ],
+          "control_range_rad": [
+            -0.19999999999999996,
+            1.57
+          ],
+          "joint_actuator_force_limited": true,
+          "joint_actuator_force_range_Nm": [
+            -30.0,
+            30.0
+          ]
+        },
+        "right": {
+          "actuator_gainprm": [
+            75.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_biasprm": [
+            0.0,
+            -75.0,
+            -5.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_forcelimited": false,
+          "actuator_forcerange": [
+            0.0,
+            0.0
+          ],
+          "joint_range_rad": [
+            -1.57,
+            0.2
+          ],
+          "control_range_rad": [
+            -1.57,
+            0.19999999999999996
+          ],
+          "joint_actuator_force_limited": true,
+          "joint_actuator_force_range_Nm": [
+            -30.0,
+            30.0
+          ]
+        }
+      },
+      "trajectory_csv": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/experiments/stance_balance_20261027_224155_950849/stance/evaluation_000025088.csv",
+      "left_hip": {
+        "final_actual_rad": -0.062013689679200484,
+        "final_target_rad": 0.20000000298023224,
+        "minimum_actuator_force": -23.604220597085135,
+        "maximum_actuator_force": 22.959279980295385,
+        "max_abs_joint_actuator_torque_Nm": 23.604220597085135,
+        "fraction_near_actuator_force_limit": null
+      },
+      "right_hip": {
+        "final_actual_rad": -0.06575494998535164,
+        "final_target_rad": -0.20000000298023224,
+        "minimum_actuator_force": -25.005844725739948,
+        "maximum_actuator_force": 22.201139333250108,
+        "max_abs_joint_actuator_torque_Nm": 25.005844725739948,
+        "fraction_near_actuator_force_limit": null
+      },
+      "branch": "stance",
+      "additional_steps": 25088,
+      "total_model_steps": 275456,
+      "model_path": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/experiments/stance_balance_20261027_224155_950849/stance/checkpoint_000025088.zip"
+    },
+    {
+      "duration_s": 14.9,
+      "steps": 745,
+      "outcome": "fall threshold reached",
+      "original_reward_return": 3256.267593306633,
+      "initial_foot_separation_m": 0.2125,
+      "final_foot_separation_m": 0.10576451086221625,
+      "maximum_foot_separation_m": 0.3088837172670812,
+      "max_absolute_width_error_m": 0.12260511188466733,
+      "final_width_growth_m": -0.10673548913778375,
+      "last_window_duration_s": 10.0,
+      "last_window_width_slope_m_s": -0.01630495867738043,
+      "max_root_displacement_m": 0.8115239046730658,
+      "minimum_root_height_m": 0.3714364738080966,
+      "minimum_upright": 0.5038973454402729,
+      "target_delta_rms_rad": 0.24265422836510897,
+      "hip_model_settings": {
+        "left": {
+          "actuator_gainprm": [
+            75.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_biasprm": [
+            0.0,
+            -75.0,
+            -5.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_forcelimited": false,
+          "actuator_forcerange": [
+            0.0,
+            0.0
+          ],
+          "joint_range_rad": [
+            -0.2,
+            1.57
+          ],
+          "control_range_rad": [
+            -0.19999999999999996,
+            1.57
+          ],
+          "joint_actuator_force_limited": true,
+          "joint_actuator_force_range_Nm": [
+            -30.0,
+            30.0
+          ]
+        },
+        "right": {
+          "actuator_gainprm": [
+            75.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_biasprm": [
+            0.0,
+            -75.0,
+            -5.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_forcelimited": false,
+          "actuator_forcerange": [
+            0.0,
+            0.0
+          ],
+          "joint_range_rad": [
+            -1.57,
+            0.2
+          ],
+          "control_range_rad": [
+            -1.57,
+            0.19999999999999996
+          ],
+          "joint_actuator_force_limited": true,
+          "joint_actuator_force_range_Nm": [
+            -30.0,
+            30.0
+          ]
+        }
+      },
+      "trajectory_csv": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/experiments/stance_balance_20261027_224155_950849/stance/evaluation_000050176.csv",
+      "left_hip": {
+        "final_actual_rad": 0.029323880740671885,
+        "final_target_rad": 0.024704966694116592,
+        "minimum_actuator_force": -25.070543684438405,
+        "maximum_actuator_force": 20.969321549464002,
+        "max_abs_joint_actuator_torque_Nm": 25.070543684438405,
+        "fraction_near_actuator_force_limit": null
+      },
+      "right_hip": {
+        "final_actual_rad": 0.19160294192917177,
+        "final_target_rad": -0.20000000298023224,
+        "minimum_actuator_force": -30.931606448313655,
+        "maximum_actuator_force": 23.237080278580933,
+        "max_abs_joint_actuator_torque_Nm": 30.0,
+        "fraction_near_actuator_force_limit": null
+      },
+      "branch": "stance",
+      "additional_steps": 50176,
+      "total_model_steps": 300544,
+      "model_path": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/experiments/stance_balance_20261027_224155_950849/stance/checkpoint_000050176.zip"
+    },
+    {
+      "duration_s": 60.0,
+      "steps": 3000,
+      "outcome": "time limit reached",
+      "original_reward_return": 13319.20863383931,
+      "initial_foot_separation_m": 0.2125,
+      "final_foot_separation_m": 0.22790750807118051,
+      "maximum_foot_separation_m": 0.2964598432537978,
+      "max_absolute_width_error_m": 0.08395984325379782,
+      "final_width_growth_m": 0.01540750807118052,
+      "last_window_duration_s": 10.0,
+      "last_window_width_slope_m_s": -0.000980541667613282,
+      "max_root_displacement_m": 0.38172107610740175,
+      "minimum_root_height_m": 0.6624919641964189,
+      "minimum_upright": 0.993193984454722,
+      "target_delta_rms_rad": 0.22035762946644918,
+      "hip_model_settings": {
+        "left": {
+          "actuator_gainprm": [
+            75.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_biasprm": [
+            0.0,
+            -75.0,
+            -5.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_forcelimited": false,
+          "actuator_forcerange": [
+            0.0,
+            0.0
+          ],
+          "joint_range_rad": [
+            -0.2,
+            1.57
+          ],
+          "control_range_rad": [
+            -0.19999999999999996,
+            1.57
+          ],
+          "joint_actuator_force_limited": true,
+          "joint_actuator_force_range_Nm": [
+            -30.0,
+            30.0
+          ]
+        },
+        "right": {
+          "actuator_gainprm": [
+            75.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_biasprm": [
+            0.0,
+            -75.0,
+            -5.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_forcelimited": false,
+          "actuator_forcerange": [
+            0.0,
+            0.0
+          ],
+          "joint_range_rad": [
+            -1.57,
+            0.2
+          ],
+          "control_range_rad": [
+            -1.57,
+            0.19999999999999996
+          ],
+          "joint_actuator_force_limited": true,
+          "joint_actuator_force_range_Nm": [
+            -30.0,
+            30.0
+          ]
+        }
+      },
+      "trajectory_csv": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/experiments/stance_balance_20261027_224155_950849/stance/evaluation_000075264.csv",
+      "left_hip": {
+        "final_actual_rad": -0.055439712770407955,
+        "final_target_rad": -0.1087835356593132,
+        "minimum_actuator_force": -21.716771896863776,
+        "maximum_actuator_force": 23.85240066377417,
+        "max_abs_joint_actuator_torque_Nm": 23.85240066377417,
+        "fraction_near_actuator_force_limit": null
+      },
+      "right_hip": {
+        "final_actual_rad": -0.04910422374095559,
+        "final_target_rad": -0.20000000298023224,
+        "minimum_actuator_force": -22.79070961514642,
+        "maximum_actuator_force": 21.417906797772726,
+        "max_abs_joint_actuator_torque_Nm": 22.79070961514642,
+        "fraction_near_actuator_force_limit": null
+      },
+      "branch": "stance",
+      "additional_steps": 75264,
+      "total_model_steps": 325632,
+      "model_path": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/experiments/stance_balance_20261027_224155_950849/stance/checkpoint_000075264.zip"
+    },
+    {
+      "duration_s": 6.38,
+      "steps": 319,
+      "outcome": "fall threshold reached",
+      "original_reward_return": 1372.913674773726,
+      "initial_foot_separation_m": 0.2125,
+      "final_foot_separation_m": 0.09181941754297487,
+      "maximum_foot_separation_m": 0.2254583496325653,
+      "max_absolute_width_error_m": 0.12068058245702512,
+      "final_width_growth_m": -0.12068058245702512,
+      "last_window_duration_s": 6.36,
+      "last_window_width_slope_m_s": -0.012026888764889884,
+      "max_root_displacement_m": 0.7523174482005471,
+      "minimum_root_height_m": 0.3764343695768894,
+      "minimum_upright": 0.4504249623578148,
+      "target_delta_rms_rad": 0.22286037678106851,
+      "hip_model_settings": {
+        "left": {
+          "actuator_gainprm": [
+            75.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_biasprm": [
+            0.0,
+            -75.0,
+            -5.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_forcelimited": false,
+          "actuator_forcerange": [
+            0.0,
+            0.0
+          ],
+          "joint_range_rad": [
+            -0.2,
+            1.57
+          ],
+          "control_range_rad": [
+            -0.19999999999999996,
+            1.57
+          ],
+          "joint_actuator_force_limited": true,
+          "joint_actuator_force_range_Nm": [
+            -30.0,
+            30.0
+          ]
+        },
+        "right": {
+          "actuator_gainprm": [
+            75.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_biasprm": [
+            0.0,
+            -75.0,
+            -5.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "actuator_forcelimited": false,
+          "actuator_forcerange": [
+            0.0,
+            0.0
+          ],
+          "joint_range_rad": [
+            -1.57,
+            0.2
+          ],
+          "control_range_rad": [
+            -1.57,
+            0.19999999999999996
+          ],
+          "joint_actuator_force_limited": true,
+          "joint_actuator_force_range_Nm": [
+            -30.0,
+            30.0
+          ]
+        }
+      },
+      "trajectory_csv": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/experiments/stance_balance_20261027_224155_950849/stance/evaluation_000100352.csv",
+      "left_hip": {
+        "final_actual_rad": 0.020994912019652954,
+        "final_target_rad": 0.20000000298023224,
+        "minimum_actuator_force": -18.41068350851792,
+        "maximum_actuator_force": 24.274997602997495,
+        "max_abs_joint_actuator_torque_Nm": 24.274997602997495,
+        "fraction_near_actuator_force_limit": null
+      },
+      "right_hip": {
+        "final_actual_rad": 0.17585369937097603,
+        "final_target_rad": -0.20000000298023224,
+        "minimum_actuator_force": -34.42655901108809,
+        "maximum_actuator_force": 13.808318363553958,
+        "max_abs_joint_actuator_torque_Nm": 30.0,
+        "fraction_near_actuator_force_limit": null
+      },
+      "branch": "stance",
+      "additional_steps": 100352,
+      "total_model_steps": 350720,
+      "model_path": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/experiments/stance_balance_20261027_224155_950849/stance/checkpoint_000100352.zip"
+    }
+  ],
+  "original_input_files_unchanged": true
+}

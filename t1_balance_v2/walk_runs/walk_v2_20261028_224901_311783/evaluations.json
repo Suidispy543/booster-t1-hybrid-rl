@@ -1,0 +1,62 @@
+[
+  {
+    "training_steps_added": 10240,
+    "checkpoint": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/t1_balance_v2/walk_runs/walk_v2_20261028_224901_311783/checkpoint_after_010240.zip",
+    "evaluation": {
+      "duration_s": 4.94,
+      "fell": true,
+      "forward_displacement_m": 0.4124,
+      "lateral_displacement_m": 0.3605,
+      "mean_forward_speed_m_s": 0.1184,
+      "mean_tilt_deg": 7.409,
+      "max_tilt_deg": 52.394,
+      "target_speed_m_s": 0.15,
+      "gait_frequency_hz": 1.0
+    }
+  },
+  {
+    "training_steps_added": 20480,
+    "checkpoint": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/t1_balance_v2/walk_runs/walk_v2_20261028_224901_311783/checkpoint_after_020480.zip",
+    "evaluation": {
+      "duration_s": 20.0,
+      "fell": false,
+      "forward_displacement_m": -0.1127,
+      "lateral_displacement_m": -0.1056,
+      "mean_forward_speed_m_s": -0.0053,
+      "mean_tilt_deg": 3.543,
+      "max_tilt_deg": 6.086,
+      "target_speed_m_s": 0.15,
+      "gait_frequency_hz": 1.0
+    }
+  },
+  {
+    "training_steps_added": 30720,
+    "checkpoint": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/t1_balance_v2/walk_runs/walk_v2_20261028_224901_311783/checkpoint_after_030720.zip",
+    "evaluation": {
+      "duration_s": 20.0,
+      "fell": false,
+      "forward_displacement_m": -0.072,
+      "lateral_displacement_m": -0.2725,
+      "mean_forward_speed_m_s": -0.0033,
+      "mean_tilt_deg": 3.02,
+      "max_tilt_deg": 6.134,
+      "target_speed_m_s": 0.15,
+      "gait_frequency_hz": 1.0
+    }
+  },
+  {
+    "training_steps_added": 40960,
+    "checkpoint": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/t1_balance_v2/walk_runs/walk_v2_20261028_224901_311783/checkpoint_after_040960.zip",
+    "evaluation": {
+      "duration_s": 20.0,
+      "fell": false,
+      "forward_displacement_m": -0.0907,
+      "lateral_displacement_m": -0.1869,
+      "mean_forward_speed_m_s": -0.0043,
+      "mean_tilt_deg": 2.796,
+      "max_tilt_deg": 5.823,
+      "target_speed_m_s": 0.15,
+      "gait_frequency_hz": 1.0
+    }
+  }
+]

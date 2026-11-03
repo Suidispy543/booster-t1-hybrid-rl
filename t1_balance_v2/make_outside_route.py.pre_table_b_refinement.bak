@@ -1,0 +1,589 @@
+from pathlib import Path
+
+SOURCE = Path("integrated_table_a_to_b_refined_viewer.py")
+OUTPUT = Path("integrated_table_a_to_b_outside_route.py")
+
+
+def replace_once(text, old, new, description):
+    count = text.count(old)
+    if count != 1:
+        raise RuntimeError(
+            f"{description}: expected exactly one match, found {count}. "
+            "Original script has not been modified."
+        )
+    return text.replace(old, new, 1)
+
+
+if not SOURCE.is_file():
+    raise FileNotFoundError(
+        f"Cannot find {SOURCE}. Run this generator from t1_balance_v2."
+    )
+
+code = SOURCE.read_text()
+
+
+# ------------------------------------------------------------
+# 1. Move the box closer to the south edge of each table.
+# ------------------------------------------------------------
+code = replace_once(
+    code,
+    'CONFIG["rewards"]["episode_length_s"] = 60.0',
+    'CONFIG["rewards"]["episode_length_s"] = 180.0',
+    "Episode length configuration",
+)
+
+code = replace_once(
+    code,
+    "episode_seconds=90.0,",
+    "episode_seconds=180.0,",
+    "Environment episode duration",
+)
+
+code = replace_once(
+    code,
+    "OBJECT_POSITION = np.array([0.56, -0.20, 0.635])",
+    """SOUTH_LANE_Y = -0.85
+PICKUP_YAW = np.deg2rad(96.0)
+OBJECT_POSITION = np.array([0.56, -0.57, 0.635])""",
+    "Table A box position",
+)
+
+
+# ------------------------------------------------------------
+# 2. Add a global-coordinate waypoint controller.
+# It converts world velocity into the robot's local frame.
+# ------------------------------------------------------------
+waypoint_helper = r'''
+        def run_teacher_waypoint(
+            target_xy,
+            target_yaw,
+            label,
+            carry=False,
+            timeout_seconds=35.0,
+        ):
+            nonlocal phase, previous_action, max_tilt
+
+            target_xy = np.asarray(target_xy, dtype=float)
+            max_steps = max(1, round(timeout_seconds / policy_dt))
+            stable_count = 0
+            stable_required = max(1, round(0.12 / policy_dt))
+
+            print("\n" + label)
+            print("Target XY:", np.round(target_xy, 3))
+            print("Target yaw:", round(np.degrees(target_yaw), 2))
+
+            for step in range(max_steps):
+                robot_xy = data.qpos[:2].copy()
+                delta_world = target_xy - robot_xy
+                distance = float(np.linalg.norm(delta_world))
+
+                R_trunk = data.xmat[trunk_id].reshape(3, 3)
+                yaw_now = float(np.arctan2(R_trunk[1, 0], R_trunk[0, 0]))
+                yaw_error = (
+                    target_yaw - yaw_now + np.pi
+                ) % (2.0 * np.pi) - np.pi
+
+                # Proportional world-frame movement with a speed limit.
+                speed = min(0.09, 0.8 * distance)
+
+                if distance < 0.035:
+                    world_vx = 0.0
+                    world_vy = 0.0
+                else:
+                    world_vx = delta_world[0] / distance * speed
+                    world_vy = delta_world[1] / distance * speed
+
+                # Convert world velocity into robot-local velocity.
+                c = np.cos(yaw_now)
+                s = np.sin(yaw_now)
+
+                vx = c * world_vx + s * world_vy
+                vy = -s * world_vx + c * world_vy
+
+                yaw_command = float(np.clip(
+                    1.5 * yaw_error, -0.15, 0.15
+                ))
+
+                if abs(yaw_error) < 0.025:
+                    yaw_command = 0.0
+
+                quat = data.sensor("orientation").data[
+                    [1, 2, 3, 0]
+                ].astype(np.float32)
+
+                angular = data.sensor(
+                    "angular-velocity"
+                ).data.astype(np.float32)
+
+                gravity = quat_rotate_inverse(
+                    quat,
+                    np.array([0., 0., -1.], dtype=np.float32),
+                )
+
+                pos = data.qpos[leg_qpos].astype(np.float32)
+                vel = data.qvel[leg_qvel].astype(np.float32)
+
+                teacher_obs = np.zeros(47, dtype=np.float32)
+                teacher_obs[0:3] = gravity * norm["gravity"]
+                teacher_obs[3:6] = angular * norm["ang_vel"]
+                teacher_obs[6] = vx * norm["lin_vel"]
+                teacher_obs[7] = vy * norm["lin_vel"]
+                teacher_obs[8] = yaw_command * norm["ang_vel"]
+                teacher_obs[9] = np.cos(2.0 * np.pi * phase)
+                teacher_obs[10] = np.sin(2.0 * np.pi * phase)
+                teacher_obs[11:23] = (
+                    pos - default_pos
+                ) * norm["dof_pos"]
+                teacher_obs[23:35] = vel * norm["dof_vel"]
+                teacher_obs[35:47] = previous_action
+
+                with torch.no_grad():
+                    action = teacher(
+                        torch.from_numpy(teacher_obs).unsqueeze(0)
+                    ).squeeze(0).cpu().numpy().astype(np.float32)
+
+                action = np.clip(
+                    action,
+                    -norm["clip_actions"],
+                    norm["clip_actions"],
+                )
+
+                _, _, terminated, truncated, _ = env.step(action)
+
+                # Keep the box attached to the hand during carrying.
+                if carry:
+                    R_hand = data.xmat[hand_id].reshape(3, 3).copy()
+                    data.mocap_pos[mocap_id] = (
+                        palm_position(data, hand_id)
+                        + R_hand @ attached_local
+                    )
+                    data.mocap_quat[mocap_id] = np.array(
+                        [1., 0., 0., 0.]
+                    )
+                    mujoco.mj_forward(model, data)
+
+                previous_action = action.copy()
+                phase = (
+                    phase + dt * frequency * decimation
+                ) % 1.0
+
+                R_trunk = data.xmat[trunk_id].reshape(3, 3)
+                tilt = float(np.degrees(np.arccos(
+                    np.clip(R_trunk[2, 2], -1.0, 1.0)
+                )))
+                max_tilt = max(max_tilt, tilt)
+
+                if (step + 1) % max(1, round(1.0 / policy_dt)) == 0:
+                    yaw_deg = np.degrees(
+                        np.arctan2(R_trunk[1, 0], R_trunk[0, 0])
+                    )
+                    message = (
+                        f"  t={(step + 1) * policy_dt:.1f}s | "
+                        f"robot={np.round(data.qpos[:2], 3)} | "
+                        f"yaw={yaw_deg:+.1f}deg | "
+                        f"tilt={tilt:.2f}deg"
+                    )
+                    if carry:
+                        message += (
+                            f" | box={np.round(data.mocap_pos[mocap_id], 3)}"
+                        )
+                    print(message)
+
+                if terminated or truncated or tilt > 25.0:
+                    raise RuntimeError(
+                        f"Waypoint stopped during {label}: "
+                        f"terminated={terminated}, "
+                        f"truncated={truncated}, tilt={tilt:.2f}deg"
+                    )
+
+                post_distance = float(np.linalg.norm(
+                    target_xy - data.qpos[:2]
+                ))
+
+                R_post = data.xmat[trunk_id].reshape(3, 3)
+                post_yaw = float(np.arctan2(R_post[1, 0], R_post[0, 0]))
+                post_yaw_error = (
+                    target_yaw - post_yaw + np.pi
+                ) % (2.0 * np.pi) - np.pi
+
+                if post_distance < 0.075 and abs(post_yaw_error) < 0.10:
+                    stable_count += 1
+                else:
+                    stable_count = 0
+
+                if stable_count >= stable_required:
+                    break
+
+            final_distance = float(np.linalg.norm(
+                target_xy - data.qpos[:2]
+            ))
+
+            R_final = data.xmat[trunk_id].reshape(3, 3)
+            final_yaw = float(np.arctan2(
+                R_final[1, 0], R_final[0, 0]
+            ))
+            final_yaw_error = (
+                target_yaw - final_yaw + np.pi
+            ) % (2.0 * np.pi) - np.pi
+
+            print("Waypoint final position:", np.round(data.qpos[:3], 3))
+            print("Waypoint position error:", round(final_distance, 3), "m")
+            print("Waypoint heading error:", round(
+                np.degrees(final_yaw_error), 2
+            ), "deg")
+
+            if final_distance > 0.12 or abs(final_yaw_error) > 0.18:
+                raise RuntimeError(
+                    f"Waypoint was not reached accurately: {label}"
+                )
+'''
+
+code = replace_once(
+    code,
+    '        print("INTEGRATED TABLE A PICKUP + LIFT")',
+    waypoint_helper + '\n        print("INTEGRATED TABLE A PICKUP + LIFT")',
+    "Waypoint controller insertion",
+)
+
+
+# ------------------------------------------------------------
+# 3. Replace the old approach and turn with an outside route.
+# The robot first goes west, then south, then east to Table A.
+# ------------------------------------------------------------
+old_approach = '''        # Phase 1: Walk towards table A.
+        run_teacher_phase(
+            WALK_SECONDS, WALK_X, WALK_Y, 0.0,
+            "PHASE 1: WALK TOWARDS TABLE A"
+        )
+
+        # Phase 2: Turn towards table A.
+        run_teacher_phase(
+            TURN_SECONDS, 0.0, 0.0, TURN_YAW,
+            "PHASE 2: TURN TOWARDS TABLE A"
+        )
+'''
+
+new_approach = '''        # PHASE 1: ROUTE AROUND THE WEST END OF TABLE A.
+        # Do not take a direct diagonal path across the tabletop.
+        start_xy = data.qpos[:2].copy()
+        start_R = data.xmat[trunk_id].reshape(3, 3)
+        start_yaw = float(np.arctan2(start_R[1, 0], start_R[0, 0]))
+
+        print("\\nPHASE 1: MOVE TO THE WEST SIDE OF TABLE A")
+        print("Initial robot position:", np.round(start_xy, 3))
+
+        run_teacher_waypoint(
+            np.array([-0.05, SOUTH_LANE_Y]),
+            start_yaw,
+            "PHASE 1A: MOVE DIRECTLY AROUND THE WEST EDGE",
+            timeout_seconds=20.0,
+        )
+
+        run_teacher_waypoint(
+            np.array([0.50, SOUTH_LANE_Y]),
+            PICKUP_YAW,
+            "PHASE 1B: APPROACH TABLE A FROM ITS SOUTH EDGE",
+            timeout_seconds=35.0,
+        )
+
+        if data.qpos[1] > -0.70:
+            raise RuntimeError(
+                "Robot is not outside Table A. "
+                f"Base Y={data.qpos[1]:.3f}; expected Y <= -0.70."
+            )
+
+        print("Outside Table A approach completed.")
+        print("Robot pickup position:", np.round(data.qpos[:3], 3))
+'''
+
+code = replace_once(
+    code,
+    old_approach,
+    new_approach,
+    "Table A approach replacement",
+)
+
+
+# ------------------------------------------------------------
+# 4. Remove the old turn-and-walk transfer, which crossed the
+# tables. Keep the original pickup and lift phases untouched.
+# ------------------------------------------------------------
+phase9_start = '''        # =========================================================
+        # PHASE 9: WALK WHILE CARRYING
+        # =========================================================
+'''
+
+phase12_start = '''        # =========================================================
+        # PHASE 12: SWITCH BACK TO PPO FOR TABLE B PLACEMENT
+        # =========================================================
+'''
+
+if code.count(phase12_start) != 1:
+    raise RuntimeError("Could not uniquely locate Phase 12.")
+
+phase9_marker = code.index("PHASE 9: WALK WHILE CARRYING")
+start = code.rfind("        print(", 0, phase9_marker)
+if start < 0:
+    raise RuntimeError("Could not locate the actual Phase 9 print statement.")
+
+end = code.index(phase12_start, start)
+
+new_transfer = '''        # =========================================================
+        # PHASE 9: CARRY BOX ALONG THE OUTSIDE SOUTH LANE
+        # =========================================================
+        print("\\nPHASE 9: CARRY BOX OUTSIDE BOTH TABLES")
+
+        def current_yaw_deg():
+            R = data.xmat[trunk_id].reshape(3, 3)
+            return float(np.degrees(np.arctan2(R[1, 0], R[0, 0])))
+
+        handoff_position = data.qpos[:2].copy()
+        robot_before_walk = data.qpos[:3].copy()
+        object_before_walk = data.mocap_pos[mocap_id].copy()
+
+        print("Robot at carry handoff:", np.round(robot_before_walk, 3))
+        print("Object at carry handoff:", np.round(object_before_walk, 3))
+        print("Outside lane Y:", SOUTH_LANE_Y)
+
+        if data.qpos[1] > -0.70:
+            raise RuntimeError(
+                "Robot entered the table footprint before carrying."
+            )
+
+        # Keep the pickup heading during the transfer. Turning the torso
+        # here would swing the hand-attached box away from the table edge.
+        run_teacher_waypoint(
+            np.array([1.50, SOUTH_LANE_Y]),
+            PICKUP_YAW,
+            "PHASE 9: WALK EAST ALONG THE OUTSIDE SOUTH LANE",
+            carry=True,
+            timeout_seconds=50.0,
+        )
+
+        robot_after_walk = data.qpos[:3].copy()
+        object_after_walk = data.mocap_pos[mocap_id].copy()
+
+        print("\\n========== OUTSIDE TABLE TRANSFER RESULTS ==========")
+        print("Robot before transfer:", np.round(robot_before_walk, 3))
+        print("Robot after transfer:", np.round(robot_after_walk, 3))
+        print("Robot displacement:", np.round(
+            robot_after_walk[:2] - robot_before_walk[:2], 3
+        ))
+        print("Box before transfer:", np.round(object_before_walk, 3))
+        print("Box after transfer:", np.round(object_after_walk, 3))
+        print("Robot heading:", round(current_yaw_deg(), 2), "degrees")
+
+        if data.qpos[1] > -0.70:
+            raise RuntimeError(
+                "Robot left the outside lane during the transfer. "
+                f"Base Y={data.qpos[1]:.3f}."
+            )
+
+        if not (
+            1.20 <= object_after_walk[0] <= 1.92
+            and -0.575 <= object_after_walk[1] <= -0.07
+        ):
+            raise RuntimeError(
+                "Carried box is not safely over Table B. "
+                f"Actual position={np.round(object_after_walk, 3)}"
+            )
+
+        if object_after_walk[1] > -0.43:
+            raise RuntimeError(
+                "Box reached Table B but is not near its south edge. "
+                f"Actual Y={object_after_walk[1]:.3f}"
+            )
+
+        print("Robot remained outside the table footprint.")
+        print("Box reached the south side of Table B.")
+
+'''
+
+code = code[:start] + new_transfer + code[end:]
+
+
+# ------------------------------------------------------------
+# 5. Correct the final diagnostic target.
+# ------------------------------------------------------------
+code = replace_once(
+    code,
+    "table_b = np.array([1.56, -0.34])",
+    "table_b = np.array([1.56, -0.54])",
+    "Final Table B diagnostic target",
+)
+
+
+# ------------------------------------------------------------
+
+# Stop the pickup reach as soon as the hand gets close enough.
+reach_failure = """            if terminated or truncated or tilt > 20.0:
+                raise RuntimeError("PPO reach phase stopped.")
+"""
+
+reach_with_early_stop = reach_failure + """
+            current_hand = palm_position(data, hand_id)
+            current_error = float(
+                np.linalg.norm(current_hand - HAND_TARGET)
+            )
+
+            if current_error <= 0.04:
+                print(
+                    "Pickup target reached early: "
+                    f"hand={np.round(current_hand, 3)}, "
+                    f"error={current_error:.4f}m"
+                )
+                break
+"""
+
+code = replace_once(
+    code,
+    reach_failure,
+    reach_with_early_stop,
+    "Early stop when pickup reach succeeds",
+)
+
+
+# ============================================================
+# FINAL REFINEMENTS: FAST CARRY IK, TURN-WALK-TURN ROUTE,
+# AND FINAL STABILIZATION
+# ============================================================
+
+# 1. Make the IK helper configurable for fewer starting points.
+code = replace_once(
+    code,
+    "def solve_positive_elbow_ik(model, data, arm_ids, hand_id, target):",
+    "def solve_positive_elbow_ik(model, data, arm_ids, hand_id, target, max_starts=12):",
+    "Make IK starting-point count configurable",
+)
+
+old_starts = """    rng = np.random.default_rng(42)
+    starts = [start]
+    starts += [
+        rng.uniform(lo + 1e-4, hi - 1e-4)
+        for _ in range(11)
+    ]"""
+
+new_starts = """    rng = np.random.default_rng(42)
+    starts = [start]
+    starts += [
+        rng.uniform(lo + 1e-4, hi - 1e-4)
+        for _ in range(max(0, int(max_starts) - 1))
+    ]"""
+
+code = replace_once(
+    code, old_starts, new_starts,
+    "Reduce IK starting points when requested",
+)
+
+# 2. Retain just the previously tested carrying offset.
+list_start = code.index("        local_candidates = [")
+list_end = code.index("        ]", list_start) + len("        ]")
+
+code = (
+    code[:list_start]
+    + """        local_candidates = [
+            np.array([0.06, -0.06, 0.04]),
+        ]"""
+    + code[list_end:]
+)
+
+# Use only two IK starts for the carrying-pose search.
+old_carry_ik = """            candidate, error = solve_positive_elbow_ik(
+                model, data, arm_ids, hand_id, target
+            )"""
+
+new_carry_ik = """            candidate, error = solve_positive_elbow_ik(
+                model, data, arm_ids, hand_id, target,
+                max_starts=2,
+            )"""
+
+code = replace_once(
+    code, old_carry_ik, new_carry_ik,
+    "Fast carrying-pose IK",
+)
+
+
+# 3. Replace sideways transfer with right turn, straight walk,
+# and left turn at Table B.
+old_transfer = """        run_teacher_waypoint(
+            np.array([1.50, SOUTH_LANE_Y]),
+            PICKUP_YAW,
+            "PHASE 9: WALK EAST ALONG THE OUTSIDE SOUTH LANE",
+            carry=True,
+            timeout_seconds=50.0,
+        )"""
+
+new_transfer = """        # PHASE 9A: TURN RIGHT TO FACE EAST.
+        turn_right_position = data.qpos[:2].copy()
+
+        run_teacher_waypoint(
+            turn_right_position,
+            0.0,
+            "PHASE 9A: TURN RIGHT TO FACE EAST",
+            carry=True,
+            timeout_seconds=18.0,
+        )
+
+        # PHASE 9B: WALK STRAIGHT TOWARDS TABLE B.
+        run_teacher_waypoint(
+            np.array([1.43, SOUTH_LANE_Y]),
+            0.0,
+            "PHASE 9B: WALK STRAIGHT ALONG THE OUTSIDE LANE",
+            carry=True,
+            timeout_seconds=35.0,
+        )
+
+        # PHASE 9C: TURN LEFT TO FACE TABLE B.
+        turn_left_position = data.qpos[:2].copy()
+
+        run_teacher_waypoint(
+            turn_left_position,
+            PICKUP_YAW,
+            "PHASE 9C: TURN LEFT TO FACE TABLE B",
+            carry=True,
+            timeout_seconds=18.0,
+        )"""
+
+code = replace_once(
+    code, old_transfer, new_transfer,
+    "Right-turn straight-walk left-turn route",
+)
+
+
+# 4. Give final stabilization a little more time and report
+# whether the environment ended or the torso exceeded its limit.
+code = replace_once(
+    code,
+    "for step in range(round(1.5 / policy_dt)):",
+    "for step in range(round(3.0 / policy_dt)):",
+    "Extend final stabilization",
+)
+
+old_final_check = """            if terminated or truncated or tilt > 20.0:
+                raise RuntimeError("Final standing stabilization stopped.")"""
+
+new_final_check = """            if terminated or truncated:
+                raise RuntimeError(
+                    "Final stabilization ended: "
+                    f"terminated={terminated}, "
+                    f"truncated={truncated}, tilt={tilt:.2f}deg"
+                )
+
+            if tilt > 25.0:
+                raise RuntimeError(
+                    f"Final stabilization tilt exceeded 25 degrees: {tilt:.2f}"
+                )"""
+
+code = replace_once(
+    code, old_final_check, new_final_check,
+    "Improve final stabilization diagnostics",
+)
+
+# 6. Compile the generated source before writing it.
+# ------------------------------------------------------------
+compile(code, str(OUTPUT), "exec")
+OUTPUT.write_text(code)
+
+print("\\nCreated:", OUTPUT.resolve())
+print("Original script was left unchanged.")
+print("Python syntax compilation: PASSED")

@@ -1,0 +1,102 @@
+{
+  "original_policies": [
+    {
+      "checkpoint": "quiet",
+      "duration_s": 60.0,
+      "fell": false,
+      "noslip_iterations": 0,
+      "initial_width_m": 0.2125,
+      "final_width_m": 0.6686030216739748,
+      "max_root_displacement_m": 0.07235814010059759,
+      "target_delta_rms_rad": 0.01888683027648043,
+      "leg_joint_velocity_rms_rad_s": 0.084874861018873,
+      "fraction_action_components_at_99pct_limit": 0.5004444444444445,
+      "max_abs_hip_roll_torque_Nm": 17.16443924476858,
+      "last10_width_slope_m_s": 0.0055737574962836925,
+      "saved_action_std_range": [
+        1.3295022249221802,
+        1.4312589168548584,
+        1.229156494140625,
+        1.3160040378570557,
+        1.2025902271270752,
+        1.6316680908203125,
+        1.3809990882873535,
+        1.537039041519165,
+        1.3604679107666016,
+        1.1430995464324951,
+        1.0443923473358154,
+        1.817837119102478
+      ],
+      "final_hip_actual_target": {
+        "left": [
+          0.42142550698734077,
+          0.19292853772640228
+        ],
+        "right": [
+          -0.4280766314256366,
+          -0.20000000298023224
+        ]
+      }
+    },
+    {
+      "checkpoint": "stance",
+      "duration_s": 60.0,
+      "fell": false,
+      "noslip_iterations": 0,
+      "initial_width_m": 0.2125,
+      "final_width_m": 0.24398505440413912,
+      "max_root_displacement_m": 0.4672097469773132,
+      "target_delta_rms_rad": 0.22490127762623668,
+      "leg_joint_velocity_rms_rad_s": 0.9214818247423631,
+      "fraction_action_components_at_99pct_limit": 0.49988888888888894,
+      "max_abs_hip_roll_torque_Nm": 23.30227682262619,
+      "last10_width_slope_m_s": -0.00032213360790081053,
+      "saved_action_std_range": [
+        1.3104435205459595,
+        1.5188195705413818,
+        1.2807716131210327,
+        1.4311250448226929,
+        1.268342137336731,
+        1.882023811340332,
+        1.452298641204834,
+        1.6669963598251343,
+        1.397882103919983,
+        1.1486213207244873,
+        1.1818134784698486,
+        1.9785956144332886
+      ],
+      "final_hip_actual_target": {
+        "left": [
+          0.01989468144460438,
+          -0.19999999999999996
+        ],
+        "right": [
+          0.001466714800876328,
+          -0.0018856674432754517
+        ]
+      }
+    }
+  ],
+  "selected_v2": {
+    "duration_s": 60.00000000002736,
+    "fell": false,
+    "max_drift_m": 0.040690738460214045,
+    "final_width_m": 0.27756605568077813,
+    "max_width_error_m": 0.06506605568077814,
+    "minimum_height_m": 0.6638634019911446,
+    "minimum_upright": 0.9901117115185263,
+    "target_delta_rms_rad": 0.005047204816091413,
+    "leg_velocity_rms_rad_s": 0.03716977644032339,
+    "root_angular_speed_rms_rad_s": 0.028223201946231832,
+    "after5_leg_velocity_rms_rad_s": 0.0008577456283092095,
+    "last10_width_slope_m_s": 0.00011040701606668177,
+    "noslip_iterations": 0,
+    "seed": 42,
+    "reset_noise": 0.0,
+    "push": null,
+    "steps": 100352,
+    "total_model_steps": 200704,
+    "checkpoint": "checkpoint_000100352.zip",
+    "elapsed_s": 111.17600044699975
+  }
+}

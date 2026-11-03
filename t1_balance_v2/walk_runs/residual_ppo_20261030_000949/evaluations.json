@@ -1,0 +1,15 @@
+[
+  {
+    "training_steps": 5120,
+    "checkpoint": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/t1_balance_v2/walk_runs/residual_ppo_20261030_000949/checkpoint_after_005120.zip",
+    "evaluation": {
+      "duration_s": 20.0,
+      "fell": false,
+      "forward_displacement_m": 1.766,
+      "lateral_displacement_m": -0.4083,
+      "mean_body_forward_speed_m_s": 0.0894,
+      "mean_lateral_speed_m_s": -0.0225,
+      "max_tilt_deg": 3.445
+    }
+  }
+]

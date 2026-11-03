@@ -1,0 +1,10 @@
+{
+  "verified_original_uploaded_files": 47,
+  "original_inputs_unchanged": true,
+  "selected_sha256": "ecb6e4ba7f3c610c8c49a84da851ca33cc49cc72cfc94803edfceb941dc6b51c",
+  "base_environment_sha256": "5beb40a857b9416893419f8b8d157a711cf775186a2dec5e7f0b6e646e4232cc",
+  "xml_sha256": {
+    "assets/mujoco_menagerie/booster_t1/scene.xml": "0da1f67c4d9496d6680571ef2a8560ce1bbd7cf2c6178152bd883b9f17135038",
+    "assets/mujoco_menagerie/booster_t1/t1.xml": "78af3f7910e4413894863b6427f44a7daf49e5eb47628e6fe2db775219e346b9"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "method": "teacher-guided residual PPO",
+  "teacher_policy": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/t1_balance_v2/booster_gym_reference/deploy/models/T1.pt",
+  "controller_config": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/t1_balance_v2/booster_gym_reference/envs/T1.yaml",
+  "residual_scale": 0.05,
+  "target_speed_m_s": 0.1,
+  "gait_frequency_hz": 1.5,
+  "steps_requested": 5120,
+  "eval_every": 5120,
+  "learning_rate": 0.0001,
+  "observation_size": 63,
+  "action_size": 12,
+  "teacher_only_baseline": {
+    "duration_s": 20.0,
+    "fell": false,
+    "forward_displacement_m": 1.6851,
+    "lateral_displacement_m": -0.4284,
+    "mean_body_forward_speed_m_s": 0.0859,
+    "mean_lateral_speed_m_s": -0.0217,
+    "max_tilt_deg": 3.443
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "method": "behavioral cloning / supervised imitation learning",
+  "teacher": "Booster T1 pretrained actor",
+  "robot_model": "original Google DeepMind MuJoCo Menagerie T1 scene",
+  "dataset": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/t1_balance_v2/walk_runs/teacher_demos_20261028_234313/teacher_demos.npz",
+  "train_episodes": [
+    0,
+    1
+  ],
+  "validation_episode": 2,
+  "samples_total": 4500,
+  "train_samples": 3000,
+  "validation_samples": 1500,
+  "best_epoch": 131,
+  "best_validation_mse": 6.065452180337161e-05,
+  "validation_action_rmse": 0.007788101211190224,
+  "per_action_rmse": [
+    0.006404275540262461,
+    0.006312829442322254,
+    0.0038957055658102036,
+    0.013300944119691849,
+    0.0064093139953911304,
+    0.007115363143384457,
+    0.007533201016485691,
+    0.003979232627898455,
+    0.0056358822621405125,
+    0.012997361831367016,
+    0.008810083381831646,
+    0.00350612192414701
+  ],
+  "student_actor": "student_actor.pt"
+}

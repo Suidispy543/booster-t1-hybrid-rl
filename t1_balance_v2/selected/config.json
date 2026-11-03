@@ -1,0 +1,18 @@
+{
+  "environment": {
+    "alpha": 0.5,
+    "stance_weight": 2.0,
+    "drift_weight": 0.25,
+    "rate_weight": 0.2,
+    "joint_velocity_weight": 1.0
+  },
+  "model_sha256": "ecb6e4ba7f3c610c8c49a84da851ca33cc49cc72cfc94803edfceb941dc6b51c",
+  "provenance": {
+    "original_checkpoint": "experiments/stance_balance_20261027_224155_950849/stance/checkpoint_000075264.zip",
+    "phase1": "runs/stance_alpha0.5_20261028_121258_954226/checkpoint_000100352.zip",
+    "phase2": "runs/stance_alpha0.5_20261028_121845_504877/checkpoint_000100352.zip",
+    "v2_training_steps": 200704,
+    "phase2_initial_hip_mean_bias_inward": 0.4,
+    "nominal_evaluation": "evaluations/20261028_122200_281065/summary.json"
+  }
+}

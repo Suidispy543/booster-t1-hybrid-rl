@@ -1,0 +1,16 @@
+{
+  "method": "behavioral cloning with teacher and two DAgger datasets",
+  "teacher_dataset": "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/t1_balance_v2/walk_runs/teacher_demos_v2_20261029_001135/teacher_demos.npz",
+  "dagger_datasets": [
+    "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/t1_balance_v2/walk_runs/dagger_demos_20261029_002823/dagger_demos.npz",
+    "/Users/siddharthsalian/Downloads/t1_mujoco_ppo_starter/t1_balance_v2/walk_runs/dagger_demos_20261029_003124/dagger_demos.npz"
+  ],
+  "training_samples": 11000,
+  "validation_samples": 5500,
+  "best_epoch": 103,
+  "best_validation_mse": 0.00019855971913784742,
+  "overall_validation_action_rmse": 0.014091122895479202,
+  "teacher_validation_rmse": 0.008459306322038174,
+  "dagger_validation_rmse": 0.0156902726739645,
+  "student_actor": "student_actor.pt"
+}

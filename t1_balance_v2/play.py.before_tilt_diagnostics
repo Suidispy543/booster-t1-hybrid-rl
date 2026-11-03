@@ -1,0 +1,43 @@
+"""macOS: mjpython t1_balance_v2/play.py --model PATH_TO_V2_CHECKPOINT"""
+import argparse
+import time
+
+import mujoco.viewer
+from balance_env import BalanceEnv
+from evaluate import HERE,load_run
+
+
+def main():
+    p=argparse.ArgumentParser(description=__doc__)
+    p.add_argument('--model',default=str(HERE/'selected/model.zip'))
+    p.add_argument('--seconds',type=float,default=180.0)
+    p.add_argument('--loop',action='store_true')
+    args=p.parse_args()
+    if args.seconds<0.04 or not __import__('math').isfinite(args.seconds):
+        p.error('Require finite --seconds >= 0.04')
+    model,config,path=load_run(args.model)
+    env=BalanceEnv(episode_seconds=args.seconds,reset_noise=0.,**config)
+    try:
+        obs,_=env.reset(seed=42);dt=env.model.opt.timestep*env.frame_skip
+        print(f'Model: {path}\nAction filter alpha={env.alpha}; NoSlip={env.model.opt.noslip_iterations}; duration={args.seconds:g}s.')
+        with mujoco.viewer.launch_passive(env.model,env.data) as viewer:
+            with viewer.lock():
+                viewer.cam.lookat[:]=[0.,0.,.55];viewer.cam.distance=1.8;viewer.cam.azimuth=135;viewer.cam.elevation=-15
+            while viewer.is_running():
+                started=time.perf_counter()
+                with viewer.lock():
+                    action,_=model.predict(obs,deterministic=True)
+                    obs,_,term,trunc,info=env.step(action)
+                viewer.sync()
+                if env.steps%250==0 or term or trunc:
+                    print(f"t={env.data.time:.2f}s width={info['foot_width_m']:.3f}m "
+                          f"drift={info['root_displacement_m']:.3f}m height={info['root_height']:.3f}m",flush=True)
+                time.sleep(max(0.,dt-(time.perf_counter()-started)))
+                if term or trunc:
+                    print('Fall threshold reached' if term else 'Time limit reached',flush=True)
+                    if not args.loop:break
+                    with viewer.lock():obs,_=env.reset(seed=42)
+    finally:env.close()
+
+
+if __name__=='__main__':main()
